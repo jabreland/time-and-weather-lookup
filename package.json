@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --require ts-node/register tests/**/*.ts",
+    "test:watch": "mocha --require ts-node/register --watch --watch-files src, tests/**/*.ts"
   },
   "keywords": [],
   "author": "JA Breland",
