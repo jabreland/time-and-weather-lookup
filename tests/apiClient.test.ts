@@ -11,7 +11,7 @@ import * as apiClient from '../src/apiClient'
 import * as locationTestData from './googleTestData'
 import {geocodeData, newGeocodeData} from "../src/apiClient";
 
-const newYork: geocodeData = {
+export const newYork: geocodeData = {
     index: 0,
     formattedAddress: 'New York, NY, USA',
     location: {lat: 40.7127753, lng: -74.0059728},

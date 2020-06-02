@@ -30,7 +30,7 @@ export const createGeocodeURL = (address: string, key: string): string => {
 }
 
 export const createOpenWeatherURL = ({lat , lng}:coordinates, key: string) => {
-    return `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&appid=${key}`
+    return `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=metric&appid=${key}`
  //                   api.openweathermap.org/data/2.5/weather?lat=38.908133&lon=-77.047119&units=metric&appid=c139cb7da474cb64bd0335580ac289d0
 }
 
@@ -75,11 +75,23 @@ export const getLocationData = async (location :string, index : number) => {
     }
 }
 
-// const extractRequiredDataFromGeocode = () => {
-//
-// }
+const extractRequiredDataFromOpenWeather = (locationData, weatherData) : weatherData => {
+    if (locationData == null || weatherData == null)
+        new Error('Unable to process weather data. No data')
 
-export const getWeatherData = async (locationData) => {
+    const {dt, timezone, wind, weather, main} = weatherData
+    return ({
+        ...locationData,
+        timeUTC: dt,
+        timeZoneOffSet: timezone,
+        wind,
+        weather,
+        main,
+    })
+}
+
+export const getWeatherData = async (data) => {
+    const locationData = await data
     if (locationData.error) {
         return locationData
     }
@@ -88,22 +100,19 @@ export const getWeatherData = async (locationData) => {
             locationData.location,
             process.env.OPENWEATHERMAP_API_Key
         ))
-        console.log(openWeatherData)
         if(!openWeatherData.ok)
             throw new Error(`OpenWeather request failed`)
         const result = await openWeatherData.json()
-        return
+        return extractRequiredDataFromOpenWeather(locationData, result)
     } catch (error) {
         return clientErrorHandler(error, locationData.index)
     }
 }
 
-
-
 const getCurrentWeatherForLocations = (locations: string[]) => {
     const locationData = locations.map(async (location, index)=> await getLocationData(location, index))
-    const rawWeather = locationData.map((location) => getWeatherData(location))
-    rawWeather.forEach(async (weatherData) => {console.log(await weatherData)})
+    const rawWeatherData = locationData.map((location) => getWeatherData(location))
+    rawWeatherData.forEach(async (weatherData) => {console.log(await weatherData)})
 }
 const weather = getCurrentWeatherForLocations(['Toronto', 'New York', 'L9R1J5'])
 
