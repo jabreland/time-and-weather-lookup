@@ -3,7 +3,7 @@ import { getLocationData} from './apiClient'
 import getTimeData from './timeAPIClient'
 
 import { flatMap, map, switchMap } from 'rxjs/operators'
-import {getWeatherData, completeInfoData} from "./weatherAPIClient";
+import { getWeatherData, completeInfoData } from './weatherAPIClient'
 
 const getDataFromAPIs = (
   location: string,
