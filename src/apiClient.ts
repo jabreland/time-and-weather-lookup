@@ -3,7 +3,7 @@ import fetch from 'node-fetch'
 import dotenv from 'dotenv'
 // eslint-disable-next-line no-unused-vars
 import type { Response } from 'node-fetch'
-import getLocationTimeData from './timeAPIClient'
+import getTimeData from './timeAPIClient'
 import { formatData } from './formatData'
 
 dotenv.config()
@@ -137,11 +137,11 @@ const extractRequiredDataFromOpenWeather = (
 }
 
 export const getWeatherData = async (
-  data: Promise<geocodeWithTimezone>
+  data: geocodeWithTimezone
 ): Promise<weatherData> => {
-  const locationData = await data
+  const locationData = data
   if (locationData.error) {
-    return locationData
+    return { ...locationData, message: 'At weather' }
   }
   try {
     const openWeatherData = await fetch(
@@ -158,37 +158,37 @@ export const getWeatherData = async (
   }
 }
 
-const getLocationForEachCity = (locations: string[]) =>
-  locations.map((location, index) => getLocationData(location, index))
+// const getLocationForEachCity = (locations: string[]) =>
+//   locations.map((location, index) => getLocationData(location, index))
+//
+// const addTimeZoneForEachLocation = (
+//   locationsData: Promise<geocodeData>[]
+// ): Promise<geocodeWithTimezone>[] =>
+//   locationsData.map(locationData => getTimeData(locationData))
+//
+// const addWeatherForEachLocation = (
+//   locationsWithTimeZoneData: Promise<geocodeWithTimezone>[]
+// ) =>
+//   locationsWithTimeZoneData.map(async locationWTimeZone =>
+//     getWeatherData(locationWTimeZone)
+//   )
 
-const addTimeZoneForEachLocation = (
-  locationsData: Promise<geocodeData>[]
-): Promise<geocodeWithTimezone>[] =>
-  locationsData.map(locationData => getLocationTimeData(locationData))
+// const formatDataForEachLocation = (
+//   rawDataObjects: Promise<weatherData>[]
+// ): Promise<string>[] => {
+//   const readyData: Promise<
+//     string
+//   >[] = rawDataObjects.map((rawDataObject: Promise<weatherData>) =>
+//     formatData(rawDataObject)
+//   )
+//   return readyData
+// }
 
-const addWeatherForEachLocation = (
-  locationsWithTimeZoneData: Promise<geocodeWithTimezone>[]
-) =>
-  locationsWithTimeZoneData.map(async locationWTimeZone =>
-    getWeatherData(locationWTimeZone)
-  )
-
-const formatDataForEachLocation = (
-  rawDataObjects: Promise<weatherData>[]
-): Promise<string>[] => {
-  const readyData: Promise<
-    string
-  >[] = rawDataObjects.map((rawDataObject: Promise<weatherData>) =>
-    formatData(rawDataObject)
-  )
-  return readyData
-}
-
-const getInfoForLocations = (locations: string[]): Promise<string>[] => {
-  const locationsData = getLocationForEachCity(locations)
-  const locationsWithTimeZone = addTimeZoneForEachLocation(locationsData)
-  const completeData = addWeatherForEachLocation(locationsWithTimeZone)
-  return formatDataForEachLocation(completeData)
-}
+// const getInfoForLocations = (locations: string[]): Promise<string>[] => {
+//   const locationsData = getLocationForEachCity(locations)
+//   const locationsWithTimeZone = addTimeZoneForEachLocation(locationsData)
+//   const completeData = addWeatherForEachLocation(locationsWithTimeZone)
+//   return formatDataForEachLocation(completeData)
+// }
 //const weather = getInfoForLocations(['Toronto', 'New York', 'L9R1J5'])
 //weather.forEach(async w => console.log(await w))

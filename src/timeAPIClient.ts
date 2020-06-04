@@ -44,9 +44,7 @@ export const extractTimeZoneFromResponse = (
   }
 }
 
-const getLocationTimeData = async (
-  data: Promise<geocodeData>
-): Promise<geocodeWithTimezone> => {
+const getTimeData = async (data: geocodeData): Promise<geocodeWithTimezone> => {
   const locationData = await data
   if (locationData.error) {
     return locationData
@@ -61,4 +59,4 @@ const getLocationTimeData = async (
   }
 }
 
-export default getLocationTimeData
+export default getTimeData
