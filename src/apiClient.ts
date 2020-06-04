@@ -2,9 +2,9 @@
 // eslint-disable-next-line no-unused-vars
 import type { Response } from 'node-fetch'
 import fetch from 'node-fetch'
-import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
 
-dotenv.config()
+// dotenv.config()
 
 export interface locationData {
   index: number
@@ -48,9 +48,6 @@ export const extractRequiredDataFromGeocode = async (
     })
   }
 
-  const result = res.results[0] as [
-    { formatted_address; geometry: { location } }
-  ]
   return newGeocodeData({
     index,
     formattedAddress: res.results[0].formatted_address,

@@ -1,12 +1,13 @@
 import fetch, { Headers } from 'node-fetch'
-import dotenv from 'dotenv'
+// import dotenv from 'dotenv'
 import {
   clientErrorHandler,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   locationData,
   locationAndTimezone,
 } from './apiClient'
 
-dotenv.config()
+// dotenv.config()
 const clientKey = process.env.AZURE_CLIENT_ID
 const subscriptionKey = process.env.AZURE_KEY
 
@@ -22,7 +23,7 @@ export const createAzureUrl = (
   return `https://atlas.microsoft.com/timezone/byCoordinates/json?api-version=1.0&query=${lat},${lng}&subscription-key=${subscriptionKey}`
 }
 
-export const azureHeaders = (key: string) => {
+export const azureHeaders = (key: string): Headers => {
   const meta = {
     'x-ms-client-id': key,
   }
@@ -44,7 +45,9 @@ export const extractTimeZoneFromResponse = (
   }
 }
 
-const getTimeData = async (data: locationData): Promise<locationAndTimezone> => {
+const getTimeData = async (
+  data: locationData
+): Promise<locationAndTimezone> => {
   const locationData = await data
   if (locationData.error) {
     return locationData

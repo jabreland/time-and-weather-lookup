@@ -4,7 +4,11 @@ import { formatData } from './src/formatData'
 import processArgsIntoPlaceList from './src/processArgs'
 import getDataFromAPIs from './src/obtainInformation'
 
-const getAndDisplayTimeAndWeatherForLocationList = (args: string[]) => {
+const displayData = (data: string) => console.log(data)
+
+export const getAndDisplayTimeAndWeatherForLocationList = (
+  args: string[]
+): void => {
   console.log('Fetching Time and weather data...')
   const locationList = from(processArgsIntoPlaceList(args))
   const getData = locationList.pipe(
@@ -12,6 +16,6 @@ const getAndDisplayTimeAndWeatherForLocationList = (args: string[]) => {
     map(rawData => formatData(rawData))
   )
   getData.subscribe({
-    next: weatherData => console.log(weatherData),
+    next: weatherData => displayData(weatherData),
   })
 }
