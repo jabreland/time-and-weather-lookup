@@ -1,8 +1,8 @@
 import { expect } from 'chai'
 import { describe, it } from 'mocha'
-import {
+
+import processArgsIntoPlaceList, {
   combineArgListIntoString,
-  processImportArgsIntoListOfNames,
   separatePlacesInToListByCommas,
   sliceOffFirstTwoElements,
 } from '../src/processArgs'
@@ -66,7 +66,7 @@ describe('index/processImportArgsIntoListOfNames', function () {
       'Pluto',
       '10005',
     ]
-    const result = processImportArgsIntoListOfNames(inputArgsList)
+    const result = processArgsIntoPlaceList(inputArgsList)
     expect(result).to.have.lengthOf(expectedResultList.length)
     expect(result).to.eql(expectedResultList)
   })

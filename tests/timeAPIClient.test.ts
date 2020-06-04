@@ -3,9 +3,6 @@ import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import * as timeAPIClient from '../src/timeAPIClient'
 import * as testData from './testData'
-import fetch from 'node-fetch'
-import sinon from 'sinon'
-import { extractRequiredDataFromGeocode } from 'src/apiClient'
 
 chai.use(chaiAsPromised)
 

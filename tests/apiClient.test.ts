@@ -4,7 +4,6 @@ import chaiAsPromised from 'chai-as-promised'
 import * as apiClient from '../src/apiClient'
 import { locationData } from '../src/apiClient'
 import * as testData from './testData'
-import { createOpenWeatherURL } from '../src/weatherAPIClient'
 
 chai.use(chaiAsPromised)
 

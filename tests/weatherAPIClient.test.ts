@@ -26,7 +26,6 @@ describe('weatherAPI/parseDataFromOpenWeather', function () {
       locationData,
       providedWeather
     )
-    console.log(parsedWeather)
     expect(parsedWeather).to.not.be.undefined
     expect(parsedWeather).to.not.be.empty
     expect(parsedWeather).to.be.eql(expectedResult)

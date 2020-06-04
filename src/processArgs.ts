@@ -1,5 +1,3 @@
-import { from } from 'rxjs/'
-
 export const sliceOffFirstTwoElements = (args: string[]): string[] =>
   args.slice(2)
 
@@ -16,3 +14,5 @@ const processArgsIntoPlaceList = (args: string[]): string[] => {
   const stringOfPlaceNames = combineArgListIntoString(listFromArgs)
   return separatePlacesInToListByCommas(stringOfPlaceNames)
 }
+
+export default processArgsIntoPlaceList
