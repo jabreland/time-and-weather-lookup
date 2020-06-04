@@ -2,8 +2,8 @@ import fetch, { Headers } from 'node-fetch'
 import dotenv from 'dotenv'
 import {
   clientErrorHandler,
-  geocodeData,
-  geocodeWithTimezone,
+  locationData,
+  locationAndTimezone,
 } from './apiClient'
 
 dotenv.config()
@@ -31,8 +31,8 @@ export const azureHeaders = (key: string) => {
 
 export const extractTimeZoneFromResponse = (
   timeData: timeZoneResponse,
-  locationData: geocodeData
-): geocodeWithTimezone => {
+  locationData: locationData
+): locationAndTimezone => {
   if (timeData == null) throw new Error('Unable to process time data. No data')
 
   const timeZone = timeData.TimeZones[0].Id
@@ -44,7 +44,7 @@ export const extractTimeZoneFromResponse = (
   }
 }
 
-const getTimeData = async (data: geocodeData): Promise<geocodeWithTimezone> => {
+const getTimeData = async (data: locationData): Promise<locationAndTimezone> => {
   const locationData = await data
   if (locationData.error) {
     return locationData

@@ -1,4 +1,5 @@
-import { geocodeData } from 'src/apiClient'
+import { locationAndTimezone, locationData } from 'src/apiClient'
+import { completeInfoData } from '../src/weatherAPIClient'
 
 export const postalCodeA1A1A1 = {
   results: [
@@ -123,9 +124,94 @@ export const newYorkTime = {
   ],
 }
 
-export const newYorkgeocode: geocodeData = {
+export const newYorkLocationData: locationData = {
   index: 0,
   formattedAddress: 'New York, NY, USA',
   location: { lat: 40.7127753, lng: -74.0059728 },
   error: false,
+}
+
+export const newYorkLocationAndTimeData: locationAndTimezone = {
+  index: 0,
+  formattedAddress: 'New York, NY, USA',
+  location: { lat: 40.7127753, lng: -74.0059728 },
+  timeZone: 'America/New_York',
+  utcTime: '2020-06-02T12:03:22.5652539Z',
+  error: false,
+}
+
+export const newYorkWeatherData = {
+  coord: {
+    lon: -74.01,
+    lat: 40.71,
+  },
+  weather: [
+    {
+      id: 800,
+      main: 'Clear',
+      description: 'clear sky',
+      icon: '01d',
+    },
+  ],
+  base: 'stations',
+  main: {
+    temp: 20.5,
+    feels_like: 21.67,
+    temp_min: 18.89,
+    temp_max: 22.78,
+    pressure: 1011,
+    humidity: 88,
+  },
+  visibility: 16093,
+  wind: {
+    speed: 2.6,
+    deg: 240,
+  },
+  clouds: {
+    all: 1,
+  },
+  dt: 1591270780,
+  sys: {
+    type: 1,
+    id: 4610,
+    country: 'US',
+    sunrise: 1591262758,
+    sunset: 1591316596,
+  },
+  timezone: -14400,
+  id: 5128581,
+  name: 'New York',
+  cod: 200,
+}
+
+export const newYorkCompleteData: completeInfoData = {
+  error: false,
+  formattedAddress: 'New York, NY, USA',
+  index: 0,
+  location: {
+    lat: 40.7127753,
+    lng: -74.0059728,
+  },
+  main: {
+    feels_like: 21.67,
+    humidity: 88,
+    pressure: 1011,
+    temp: 20.5,
+    temp_max: 22.78,
+    temp_min: 18.89,
+  },
+  timeZone: 'America/New_York',
+  utcTime: '2020-06-02T12:03:22.5652539Z',
+  weather: [
+    {
+      description: 'clear sky',
+      icon: '01d',
+      id: 800,
+      main: 'Clear',
+    },
+  ],
+  wind: {
+    deg: 240,
+    speed: 2.6,
+  },
 }

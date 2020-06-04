@@ -1,14 +1,12 @@
 /* eslint-disable space-unary-ops */
-import fetch from 'node-fetch'
-import dotenv from 'dotenv'
 // eslint-disable-next-line no-unused-vars
 import type { Response } from 'node-fetch'
-import getTimeData from './timeAPIClient'
-import { formatData } from './formatData'
+import fetch from 'node-fetch'
+import dotenv from 'dotenv'
 
 dotenv.config()
 
-export interface geocodeData {
+export interface locationData {
   index: number
   locationAskedFor?: string
   formattedAddress?: string
@@ -22,30 +20,16 @@ interface coordinates {
   lng: number
 }
 
-export interface geocodeWithTimezone extends geocodeData {
+export interface locationAndTimezone extends locationData {
   timeZone?: string
   utcTime?: string
-}
-
-export interface weatherData extends geocodeWithTimezone {
-  wind?: { speed?: number; direction?: number; gust?: number }
-  weather?: { description: string }[]
-  main?: {
-    temp: number
-    feels_like: number
-    pressure: number
-    humidity: number
-  }
 }
 
 export const createGeocodeURL = (address: string, key: string): string => {
   return `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${key}`
 }
 
-export const createOpenWeatherURL = ({ lat, lng }, key: string): string =>
-  `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&units=metric&appid=${key}`
-
-export const newGeocodeData = (data: geocodeData): geocodeData => {
+export const newGeocodeData = (data: locationData): locationData => {
   const defaultProperties = { index: -1, error: false }
   return { ...defaultProperties, ...data }
 }
@@ -54,7 +38,7 @@ export const extractRequiredDataFromGeocode = async (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   response: Promise<any>,
   index = -1
-): Promise<geocodeData> => {
+): Promise<locationData> => {
   const res = await response
   if (response == null || res.results.length === 0) {
     return newGeocodeData({
@@ -74,7 +58,7 @@ export const extractRequiredDataFromGeocode = async (
     error: false,
   })
 }
-export const clientErrorHandler = (err: Error, index: number): geocodeData => {
+export const clientErrorHandler = (err: Error, index: number): locationData => {
   return newGeocodeData({ index, error: true, message: err.message })
 }
 
@@ -90,7 +74,7 @@ export const processResponse = async (
 export const getLocationData = async (
   location: string,
   index: number
-): Promise<geocodeData> => {
+): Promise<locationData> => {
   try {
     const geocodeData = await fetch(
       createGeocodeURL(location, process.env.GOOGLE_API_KEY)
@@ -105,90 +89,3 @@ export const getLocationData = async (
     return clientErrorHandler(err, index)
   }
 }
-
-interface openWeatherData {
-  dt: number
-  wind: { speed: number }
-  weather: { description: string }[]
-  main: {
-    temp: number
-    // eslint-disable-next-line camelcase
-    feels_like: number
-    pressure: number
-    humidity: number
-    feelsLike?
-  }
-}
-
-const extractRequiredDataFromOpenWeather = (
-  locationData: geocodeWithTimezone,
-  weatherData: openWeatherData
-): weatherData => {
-  if (locationData == null || weatherData == null) {
-    throw new Error('Unable to process weather data. No data')
-  }
-  const { wind, weather, main } = weatherData
-  return {
-    ...locationData,
-    wind,
-    weather,
-    main,
-  }
-}
-
-export const getWeatherData = async (
-  data: geocodeWithTimezone
-): Promise<weatherData> => {
-  const locationData = data
-  if (locationData.error) {
-    return { ...locationData, message: 'At weather' }
-  }
-  try {
-    const openWeatherData = await fetch(
-      createOpenWeatherURL(
-        locationData.location,
-        process.env.OPENWEATHERMAP_API_Key
-      )
-    )
-    if (!openWeatherData.ok) throw new Error('OpenWeather request failed')
-    const result = await openWeatherData.json()
-    return extractRequiredDataFromOpenWeather(locationData, result)
-  } catch (err) {
-    return clientErrorHandler(err, locationData.index)
-  }
-}
-
-// const getLocationForEachCity = (locations: string[]) =>
-//   locations.map((location, index) => getLocationData(location, index))
-//
-// const addTimeZoneForEachLocation = (
-//   locationsData: Promise<geocodeData>[]
-// ): Promise<geocodeWithTimezone>[] =>
-//   locationsData.map(locationData => getTimeData(locationData))
-//
-// const addWeatherForEachLocation = (
-//   locationsWithTimeZoneData: Promise<geocodeWithTimezone>[]
-// ) =>
-//   locationsWithTimeZoneData.map(async locationWTimeZone =>
-//     getWeatherData(locationWTimeZone)
-//   )
-
-// const formatDataForEachLocation = (
-//   rawDataObjects: Promise<weatherData>[]
-// ): Promise<string>[] => {
-//   const readyData: Promise<
-//     string
-//   >[] = rawDataObjects.map((rawDataObject: Promise<weatherData>) =>
-//     formatData(rawDataObject)
-//   )
-//   return readyData
-// }
-
-// const getInfoForLocations = (locations: string[]): Promise<string>[] => {
-//   const locationsData = getLocationForEachCity(locations)
-//   const locationsWithTimeZone = addTimeZoneForEachLocation(locationsData)
-//   const completeData = addWeatherForEachLocation(locationsWithTimeZone)
-//   return formatDataForEachLocation(completeData)
-// }
-//const weather = getInfoForLocations(['Toronto', 'New York', 'L9R1J5'])
-//weather.forEach(async w => console.log(await w))

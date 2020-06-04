@@ -1,6 +1,7 @@
 import { from } from 'rxjs'
 import { flatMap, map } from 'rxjs/operators'
 import { formatData } from './src/formatData'
+import getDataFromAPIs from './src/obtainInformation'
 
 export const sliceOffFirstTwoElements = (args: string[]): string[] =>
   args.slice(2)

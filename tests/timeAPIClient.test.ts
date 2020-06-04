@@ -2,7 +2,7 @@ import { describe, it } from 'mocha'
 import chai, { expect } from 'chai'
 import chaiAsPromised from 'chai-as-promised'
 import * as timeAPIClient from '../src/timeAPIClient'
-import * as testData from './TestData'
+import * as testData from './testData'
 import fetch from 'node-fetch'
 import sinon from 'sinon'
 import { extractRequiredDataFromGeocode } from 'src/apiClient'
@@ -34,7 +34,7 @@ describe('timeAPIClient/extractTimeZoneFromResponse', () => {
   it('should return the timezone and the utc stamp from the json provided by the timezone server', () => {
     const result = timeAPIClient.extractTimeZoneFromResponse(
       testData.newYorkTime,
-      testData.newYorkgeocode
+      testData.newYorkLocationData
     )
     expect(result).to.have.property('timeZone', 'America/New_York')
     expect(result).to.have.property('utcTime')
