@@ -1,0 +1,7 @@
+#!/usr/bin/env -S npx ts-node -r dotenv/config
+/* eslint-disable @typescript-eslint/no-var-requires */
+const doWeather = require('./index.ts')
+
+doWeather.getAndDisplayTimeAndWeatherForLocationList(process.argv)
+
+//getAndDisplayTimeAndWeatherForLocationList(process.argv)

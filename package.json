@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha --require ts-node/register tests/**/*.ts",
-    "test:watch": "mocha --require ts-node/register --watch --watch-files src, tests/**/*.ts"
+    "test:watch": "mocha --require ts-node/register --watch --watch-files src, tests/**/*.ts",
+    "build" : "tsc "
   },
   "keywords": [],
   "author": "JA Breland",
