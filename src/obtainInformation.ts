@@ -11,7 +11,6 @@ const getDataFromAPIs = (
 ): Observable<completeInfoData> => {
   const createStreamFromLocation = from(getLocationData(location, index)).pipe(
     switchMap(locationData => getTimeData(locationData)),
-    //    catchError(err => from( {index: -1, message: err.message, error: true})),
     switchMap(locationAndTimeData => getWeatherData(locationAndTimeData))
   )
 
